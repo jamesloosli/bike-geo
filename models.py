@@ -3,6 +3,8 @@
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -10,12 +12,12 @@ Base = declarative_base()
 class FrameSize(Base):
     __tablename__ = 'framesizes'
     # 'Large'
-    id = Column(String(10, primary_key=True))
+    id = Column(String(10), primary_key=True)
 
 class WheelSize(Base):
     __tablename__ = 'wheelsizes'
     # 'Large'
-    id = Column(String(10, primary_key=True))
+    id = Column(String(10), primary_key=True)
 
 class Year(Base):
     __tablename__ = 'years'
@@ -34,7 +36,7 @@ class Brand(Base):
 class Model(Base):
     __tablename__ = 'models'
     id = Column(Integer, primary_key=True)
-    brand_id = Column(Integer, ForeignKey('brands.id')
+    brand_id = Column(Integer, ForeignKey('brands.id'))
     year = Column(Integer, ForeignKey('years.id'))
     name = Column(String(255))
 
@@ -45,9 +47,9 @@ class Geometry(Base):
     __tablename__ = 'geometry'
     id = Column(Integer, primary_key=True)
     # Foreign Keys
-    model_id = Column(Integer, ForeignKey('models.id')
-    framesize = Column(String(10), ForeignKey('framesizes.id')
-    wheelsize = Column(String(10), ForeignKey('wheelsizes.id')
+    model_id = Column(Integer, ForeignKey('models.id'))
+    framesize = Column(String(10), ForeignKey('framesizes.id'))
+    wheelsize = Column(String(10), ForeignKey('wheelsizes.id'))
         
     # Actual Geo (use mm)
     seattube_length = Column(Integer)
