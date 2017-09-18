@@ -1,58 +1,63 @@
 
-from models import Todo
+from models import Brand
 from db import session
 
-from flask.ext.restful import reqparse
-from flask.ext.restful import abort
-from flask.ext.restful import Resource
-from flask.ext.restful import fields
-from flask.ext.restful import marshal_with
+from flask_restful import reqparse
+from flask_restful import abort
+from flask_restful import Resource
+from flask_restful import fields
+from flask_restful import marshal_with
 
-todo_fields = {
-    'id': fields.Integer,
-    'task': fields.String,
-    'uri': fields.Url('todo', absolute=True),
+brand_fields = {
+    'id': fields.Integer('brand_id'),
+    'name': fields.String,
+    'website': fields.String(default=''),
+    'uri': fields.Url('brands', absolute=True),
 }
 
 parser = reqparse.RequestParser()
-parser.add_argument('task', type=str)
+parser.add_argument('name', type=str, help='Name should be a string', required=True)
+parser.add_argument('website', type=str, help='Website should be a string')
 
-class TodoResource(Resource):
-    @marshal_with(todo_fields)
-    def get(self, id):
-        todo = session.query(Todo).filter(Todo.id == id).first()
-        if not todo:
-            abort(404, message="Todo {} doesn't exist".format(id))
-        return todo
+class BrandResource(Resource):
+    @marshal_with(brand_fields)
+    def get(self, brand_id):
+        brand = session.query(Brand).filter(Brand.id == brand_id).first()
+        if not brand:
+            abort(404, message="Brand {} doesn't exist".format(id))
+        return brand
 
-    def delete(self, id):
-        todo = session.query(Todo).filter(Todo.id == id).first()
-        if not todo:
-            abort(404, message="Todo {} doesn't exist".format(id))
-        session.delete(todo)
+    def delete(self, brand_id):
+        brand = session.query(Brand).filter(Brand.id == brand_id).first()
+        if not brand:
+            abort(404, message="Brand {} doesn't exist".format(id))
+        session.delete(brand)
         session.commit()
         return {}, 204
 
-    @marshal_with(todo_fields)
-    def put(self, id):
+    @marshal_with(brand_fields)
+    def put(self, brand_id):
         parsed_args = parser.parse_args()
-        todo = session.query(Todo).filter(Todo.id == id).first()
-        todo.task = parsed_args['task']
-        session.add(todo)
+        brand = session.query(Brand).filter(Brand.id == brand_id).first()
+        brand.name = parsed_args['name']
+        brand.website = parsed_args['website']
+        session.add(brand)
         session.commit()
-        return todo, 201
+        return brand, 201
 
 
-class TodoListResource(Resource):
-    @marshal_with(todo_fields)
+class BrandListResource(Resource):
+    @marshal_with(brand_fields)
     def get(self):
-        todos = session.query(Todo).all()
-        return todos
+        brands = session.query(Brand).all()
+        return brands
 
-    @marshal_with(todo_fields)
+    @marshal_with(brand_fields)
     def post(self):
         parsed_args = parser.parse_args()
-        todo = Todo(task=parsed_args['task'])
-        session.add(todo)
+        brand = Brand()
+        brand.name = parsed_args['name']
+        brand.website = parsed_args['website']
+        session.add(brand)
         session.commit()
-        return todo, 201
+        return brand, 201

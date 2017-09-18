@@ -1,1 +1,1 @@
-DB_URI = 'sqlite:///./main.db'
+DB_URI = 'sqlite:///.sqlite3'
