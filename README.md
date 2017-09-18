@@ -1,3 +1,5 @@
+(Stolen from zzzeek, all credit goes to him)
+
 Demo RESTful HTTP API using [Flask](https://github.com/pallets/flask), [Flask-Restful](https://github.com/flask-restful/flask-restful) and [SQLAlchemy](https://github.com/zzzeek/sqlalchemy)
 ===================
 
