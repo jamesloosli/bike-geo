@@ -15,6 +15,13 @@ brand_fields = {
     'uri': fields.Url('brands', absolute=True),
 }
 
+model_fields = { 
+    'id': fields.Integer('model_id'),
+    'brand_id': fields.Integer('brand_id'),
+    'name': fields.String(absolute=True),
+    'year': fields.Integer
+}
+
 parser = reqparse.RequestParser()
 parser.add_argument('name', type=str, help='Name should be a string', required=True)
 parser.add_argument('website', type=str, help='Website should be a string')
